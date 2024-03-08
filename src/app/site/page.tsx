@@ -1,4 +1,13 @@
+import { Card } from "@/components/ui/card";
+import { CardHeader } from "@/components/ui/card";
+import { CardTitle } from "@/components/ui/card";
+import { CardDescription } from "@/components/ui/card";
+import { CardContent } from "@/components/ui/card";
+import { CardFooter } from "@/components/ui/card";
 import Image from "next/image";
+import Link from "next/link";
+import { Check } from 'lucide-react'
+import { pricingCards } from "@/lib/constants";
 export default async function Home() {
   return (
     <>
@@ -19,6 +28,54 @@ export default async function Home() {
             className="rounded-tl-2xl rounded-tr-2xl border-2 border-muted"
           />
           <div className="bottom-0 top-[50%] bg-gradient-to-t dark:from-background left-0 right-0 absolute z-10"></div>
+        </div>
+      </section>
+      <section className="flex justify-center items-center flex-col gap-4 md:!mt-20 mt-[-60px]">
+        <h2 className="text-4xl text-center">Choose what fits you right</h2>
+        <p className="text-muted-foreground text-center">
+          Our straightforward pricing plans are tailored to meet your needs. If{" "}
+          {"you're"} not
+          <br />
+          ready to commit you can get started for free.
+        </p>
+        <div className="flex justify-center gap-4 flex-wrap mt-6">
+          {pricingCards.map((card) => (
+            // WIP: Wire up free product from Stripe
+            <Card
+              key={card.title}
+              className={`w-[300px] flex flex-col justify-between ${
+                card.title === "Unlimited Saas" && "border-2 border-primary"
+              }`}
+            >
+              <CardHeader>
+                <CardTitle
+                  className={`${
+                    card.title !== "Unlimited Saas" && "text-muted-foreground"
+                  }`}
+                >
+                  {card.title}
+                </CardTitle>
+                <CardDescription>{card.description}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <span className="text-4xl font-bold">{card.price}</span>
+                <span className="text-muted-foreground">/m</span>
+              </CardContent>
+              <CardFooter className="flex flex-col items-start gap-4">
+                <div>
+                  {card.features.map((feature) => (
+                    <div key={feature} className="flex gap-2 items-center">
+                      <Check className="text-muted-foreground" />
+                      <p>{feature}</p>
+                    </div>
+                  ))}
+                </div>
+                <Link href={`/agency?plan=${card.priceId}`} className={`w-full text-center bg-primary p-2 rounded-md ${card.title !== 'Unlimited Saas' && '!bg-muted-foreground'}`}>
+                  Get Started
+                </Link>
+              </CardFooter>
+            </Card>
+          ))}
         </div>
       </section>
     </>
